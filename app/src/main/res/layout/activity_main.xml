@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,12 +14,8 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="基本信息"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            style="@style/Title"
+            android:text="基本信息" />
 
 
         <RelativeLayout style="@style/Item.Layout">
@@ -239,12 +235,9 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="CPU"
-            android:textColor="#000"
-            android:textSize="16sp" />
+             />
 
 
         <RelativeLayout style="@style/Item.Layout">
@@ -311,6 +304,7 @@
                 style="@style/Item.Edit"
                 android:hint="频率" />
         </RelativeLayout>
+
         <RelativeLayout style="@style/Item.Layout">
 
             <TextView
@@ -325,15 +319,11 @@
         </RelativeLayout>
 
 
-
         <!--存储（可用/总量）-->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="存储（可用/总量）"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -376,12 +366,9 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="显示"
-            android:textColor="#000"
-            android:textSize="16sp" />
+             />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -512,12 +499,9 @@
 
         <!--相机-->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="相机"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -547,12 +531,9 @@
 
         <!--电池-->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="电池"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -566,6 +547,7 @@
                 style="@style/Item.Edit"
                 android:hint="容量" />
         </RelativeLayout>
+
         <RelativeLayout style="@style/Item.Layout">
 
             <TextView
@@ -578,6 +560,7 @@
                 style="@style/Item.Edit"
                 android:hint="技术" />
         </RelativeLayout>
+
         <RelativeLayout style="@style/Item.Layout">
 
             <TextView
@@ -590,6 +573,7 @@
                 style="@style/Item.Edit"
                 android:hint="电压" />
         </RelativeLayout>
+
         <RelativeLayout style="@style/Item.Layout">
 
             <TextView
@@ -602,6 +586,7 @@
                 style="@style/Item.Edit"
                 android:hint="电量" />
         </RelativeLayout>
+
         <RelativeLayout style="@style/Item.Layout">
 
             <TextView
@@ -614,6 +599,7 @@
                 style="@style/Item.Edit"
                 android:hint="温度" />
         </RelativeLayout>
+
         <RelativeLayout style="@style/Item.Layout">
 
             <TextView
@@ -629,12 +615,9 @@
 
         <!--传输-->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="传输"
-            android:textColor="#000"
-            android:textSize="16sp" />
+             />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -652,12 +635,9 @@
 
         <!--传感器-->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="传感器"
-            android:textColor="#000"
-            android:textSize="16sp" />
+           />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -670,20 +650,16 @@
             <TextView
                 android:id="@+id/sensorList"
                 style="@style/Item.Edit"
-                android:scrollbars="vertical"
-                android:hint="sensorList" />
+                android:hint="sensorList"
+                android:scrollbars="vertical" />
         </RelativeLayout>
-
 
 
         <!--状态信息-->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            style="@style/Title"
             android:text="状态信息"
-            android:textColor="#000"
-            android:textSize="16sp" />
+           />
 
         <RelativeLayout style="@style/Item.Layout">
 
@@ -981,4 +957,4 @@
             android:layout_width="match_parent"
             android:layout_height="5dp" />
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

@@ -1,5 +1,6 @@
 package com.beichende.device;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ConfigurationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
@@ -68,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (isAdopt(this)){
-            Toast.makeText(this,"当前运行在模拟器，可能存在部分功能异常",Toast.LENGTH_SHORT).show();
+        if (isAdopt(this)) {
+            Toast.makeText(this, "当前运行在模拟器，可能存在部分功能异常", Toast.LENGTH_SHORT).show();
         }
         PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
             @Override
@@ -123,8 +126,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //基本信息
         initBaseInfo();
 
-        //CPU
-        initCpuInfo();
+        try {
+            //CPU
+            initCpuInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //存储（可用/总量）
         initMemoryInfo();
@@ -200,20 +207,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSystemService(CONNECTIVITY_SERVICE);
         //获取网络的状态信息，有下面三种方式
         NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+        if (networkInfo != null){
+            setEditText(R.id.lianwang, networkInfo.getType() + "");
+            setEditText(R.id.lianwangname, networkInfo.getTypeName());
+        }else {
+            setEditText(R.id.lianwang, "无网络");
+            setEditText(R.id.lianwangname, "--");
+        }
 
-        setEditText(R.id.lianwang, networkInfo.getType() + "");
-        setEditText(R.id.lianwangname, networkInfo.getTypeName());
-        setEditText(R.id.imei, telephonyManager.getDeviceId());
-        setEditText(R.id.imsi, telephonyManager.getSubscriberId());
-        setEditText(R.id.number, telephonyManager.getLine1Number());//获取本机号码，不支持所有手机
-        setEditText(R.id.simserial, telephonyManager.getSimSerialNumber());
-        setEditText(R.id.simoperator, telephonyManager.getSimOperator());
-        setEditText(R.id.simoperatorname, telephonyManager.getSimOperatorName());
-        setEditText(R.id.simcountryiso, telephonyManager.getSimCountryIso());
-        setEditText(R.id.workType, telephonyManager.getNetworkType() + "");
-        setEditText(R.id.netcountryiso, telephonyManager.getNetworkCountryIso());
-        setEditText(R.id.netoperator, telephonyManager.getNetworkOperator());
-        setEditText(R.id.netoperatorname, telephonyManager.getNetworkOperatorName());
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            setEditText(R.id.imei, telephonyManager.getDeviceId());
+            setEditText(R.id.imsi, telephonyManager.getSubscriberId());
+            setEditText(R.id.number, telephonyManager.getLine1Number());//获取本机号码，不支持所有手机
+            setEditText(R.id.simserial, telephonyManager.getSimSerialNumber());
+            setEditText(R.id.simoperator, telephonyManager.getSimOperator());
+            setEditText(R.id.simoperatorname, telephonyManager.getSimOperatorName());
+            setEditText(R.id.simcountryiso, telephonyManager.getSimCountryIso());
+            setEditText(R.id.workType, telephonyManager.getNetworkType() + "");
+            setEditText(R.id.netcountryiso, telephonyManager.getNetworkCountryIso());
+            setEditText(R.id.netoperator, telephonyManager.getNetworkOperator());
+            setEditText(R.id.netoperatorname, telephonyManager.getNetworkOperatorName());
+        }
 
 
         setEditText(R.id.radiovis, android.os.Build.getRadioVersion());
@@ -250,7 +264,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          * getRealMetrics - 屏幕的原始尺寸，即包含状态栏。
          * version >= 4.2.2
          */
-        display.getRealMetrics(dm);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            display.getRealMetrics(dm);
+        }
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         setEditText(R.id.resolution, width + "*" + height);
@@ -342,8 +358,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initCpuInfo() {
         setEditText(R.id.curCoreNum, Runtime.getRuntime().availableProcessors() + "");
         setEditText(R.id.cpu, CpuUtils.getCpuName());
-        String abis = Arrays.toString(Build.SUPPORTED_ABIS);
-        setEditText(R.id.cpuabi, abis);
+        String abis;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            abis = Arrays.toString(Build.SUPPORTED_ABIS);
+            setEditText(R.id.cpuabi, abis);
+        }else {
+            setEditText(R.id.cpuabi, "--");
+        }
         setEditText(R.id.cpuFramework, CpuUtils.getCpuFramework());
         setEditText(R.id.cpuFreq, CpuUtils.getMinCpuFreq() + " ~ " + CpuUtils.getMaxCpuFreq());
         setEditText(R.id.curCpuFreq, CpuUtils.getCurCpuFreq());
