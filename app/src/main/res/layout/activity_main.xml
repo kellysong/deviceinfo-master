@@ -497,6 +497,33 @@
 
         </RelativeLayout>
 
+        <RelativeLayout style="@style/Item.Layout">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="smallestWidth" />
+
+            <TextView
+                android:id="@+id/smallestWidth"
+                style="@style/Item.Edit" />
+
+        </RelativeLayout>
+        <RelativeLayout style="@style/Item.Layout">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="屏幕方向" />
+
+            <TextView
+                android:id="@+id/orientation"
+                style="@style/Item.Edit" />
+
+        </RelativeLayout>
+
+
+
         <!--相机-->
         <TextView
             style="@style/Title"

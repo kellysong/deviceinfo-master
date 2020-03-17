@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -45,6 +46,7 @@ import com.beichende.device.util.CpuUtils;
 import com.beichende.device.util.LogUtils;
 import com.beichende.device.util.OsUtils;
 import com.beichende.device.util.RamAndRomUtils;
+import com.beichende.device.util.ScreenUtils;
 import com.beichende.device.util.SensorUtils;
 import com.beichende.device.widget.GpuRenderer;
 
@@ -260,6 +262,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.content_wh, display.getWidth() + "*" + display.getHeight());
         setEditText(R.id.dpi, densityDpi + "");
         setEditText(R.id.density, dm.density + "");
+
+        int heightPixels = ScreenUtils.getScreenHeight(this);
+        int widthPixels = ScreenUtils.getScreenWidth(this);
+        float density = dm.density;
+        float heightDP =heightPixels / density;
+        float widthDP = widthPixels/ density;
+        float smallestWidthDP;
+        if(widthDP < heightDP) {
+            smallestWidthDP = widthDP;
+        }else {
+            smallestWidthDP = heightDP;
+        }
+        setEditText(R.id.smallestWidth, smallestWidthDP + "");
+
+        Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation; //获取屏幕方向
+        if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+            //横屏
+            setEditText(R.id.orientation, "横屏");
+        } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+            //竖屏
+            setEditText(R.id.orientation, "竖屏");
+        }
+
         /**
          * getRealMetrics - 屏幕的原始尺寸，即包含状态栏。
          * version >= 4.2.2
