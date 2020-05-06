@@ -14,19 +14,23 @@
     <style name="Item.Layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dip</item>
-        <item name="android:orientation">vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">5dp</item>
     </style>
 
-    <style name="Item.Label">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
 
+    <style name="Item.Label">
+        <item name="android:layout_width">150dip</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="Item.Edit">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginLeft">120dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginRight">5dip</item>
     </style>
 

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/deviceinfo-master.iml" filepath="$PROJECT_DIR$/deviceinfo-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="deviceinfo-master/app" />
+      <module fileurl="file://$PROJECT_DIR$/deviceinfo-master.iml" filepath="$PROJECT_DIR$/deviceinfo-master.iml" group="deviceinfo-master" />
     </modules>
   </component>
 </project>

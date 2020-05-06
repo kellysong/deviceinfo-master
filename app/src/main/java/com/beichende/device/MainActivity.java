@@ -43,6 +43,7 @@ import com.beichende.device.bean.DeviceInfo;
 import com.beichende.device.util.BatteryUtils;
 import com.beichende.device.util.CameraUtils;
 import com.beichende.device.util.CpuUtils;
+import com.beichende.device.util.DeviceIdUtils;
 import com.beichende.device.util.LogUtils;
 import com.beichende.device.util.OsUtils;
 import com.beichende.device.util.RamAndRomUtils;
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 禁止应用在模拟器上运行
      * 检测点：电池电量和温度（模拟器的电池伏数可以为0或者是1000，而温度一定是0。但是真机的是可变的）
+     *
      * @param context
      * @return
      */
@@ -156,6 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.registerReceiver(batInfoReceiver, intentFilter);
     }
 
+    /**
+     * 初始化传感器信息
+     */
     private void initSensorInfo() {
         String sensorInfo = SensorUtils.getDeviceSensorInfo(this);
         TextView view = findViewById(R.id.sensorList);
@@ -192,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 初始化状态信息
+     */
     private void initStatusInfo() {
         try {
             Class localClass = Class.forName("android.os.SystemProperties");
@@ -209,10 +217,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSystemService(CONNECTIVITY_SERVICE);
         //获取网络的状态信息，有下面三种方式
         NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
-        if (networkInfo != null){
+        if (networkInfo != null) {
             setEditText(R.id.lianwang, networkInfo.getType() + "");
             setEditText(R.id.lianwangname, networkInfo.getTypeName());
-        }else {
+        } else {
             setEditText(R.id.lianwang, "无网络");
             setEditText(R.id.lianwangname, "--");
         }
@@ -262,19 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.content_wh, display.getWidth() + "*" + display.getHeight());
         setEditText(R.id.dpi, densityDpi + "");
         setEditText(R.id.density, dm.density + "");
-
-        int heightPixels = ScreenUtils.getScreenHeight(this);
-        int widthPixels = ScreenUtils.getScreenWidth(this);
-        float density = dm.density;
-        float heightDP =heightPixels / density;
-        float widthDP = widthPixels/ density;
-        float smallestWidthDP;
-        if(widthDP < heightDP) {
-            smallestWidthDP = widthDP;
-        }else {
-            smallestWidthDP = heightDP;
-        }
-        setEditText(R.id.smallestWidth, smallestWidthDP + "");
+        setEditText(R.id.smallestWidth, ScreenUtils.getSmallestWidthDP(this) + "");
 
         Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
         int ori = mConfiguration.orientation; //获取屏幕方向
@@ -285,6 +281,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //竖屏
             setEditText(R.id.orientation, "竖屏");
         }
+        /**
+         *        mdpi 120dpi~160dpi
+         *         hdpi 160dpi~240dpi
+         *         xhdpi 240dpi~320dpi
+         *         xxhdpi 320dpi~480dpi
+         *         xxxhdpi 480dpi~640dpi
+         */
+        String dir;
+        if (densityDpi <= 120){
+            dir="mipmap-ldpi";
+        }else if(densityDpi <= 160){
+            dir="mipmap-mdpi";
+        }else if(densityDpi <= 240){
+            dir="mipmap-hdpi";
+        }else if(densityDpi <= 320){
+            dir="mipmap-xhdpi";
+        }else if(densityDpi <= 480){
+            dir="mipmap-xxhdpi";
+        }else if(densityDpi <= 640){
+            dir="mipmap-xxxhdpi";
+        }else{
+            dir="mipmap-xxxxhdpi";
+        }
+        setEditText(R.id.imgDir, dir);
+
 
         /**
          * getRealMetrics - 屏幕的原始尺寸，即包含状态栏。
@@ -379,6 +400,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.ram, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableMemory(this), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalMemorySize(this), false, true));
         setEditText(R.id.rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableInternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalInternalMemorySize(), false, true));
         setEditText(R.id.sd_rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableExternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalExternalMemorySize(), false, true));
+        setEditText(R.id.app_rom, RamAndRomUtils.getMemoryClass(this) + "M");
+
     }
 
     private void initCpuInfo() {
@@ -388,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             abis = Arrays.toString(Build.SUPPORTED_ABIS);
             setEditText(R.id.cpuabi, abis);
-        }else {
+        } else {
             setEditText(R.id.cpuabi, "--");
         }
         setEditText(R.id.cpuFramework, CpuUtils.getCpuFramework());
@@ -423,6 +446,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        webView.getSettings().setUserAgentString(userAgent+";beichende/paf");
 //        userAgent = settings.getUserAgentString();
         setEditText(R.id.userAgent, userAgent);
+        String uniquePsuedoID = DeviceIdUtils.getUniquePsuedoID();
+        LogUtils.i("uniquePsuedoID:" + uniquePsuedoID);
+        setEditText(R.id.uuid, uniquePsuedoID);
 
     }
 

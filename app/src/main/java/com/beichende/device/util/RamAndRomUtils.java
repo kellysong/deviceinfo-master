@@ -168,4 +168,14 @@ public class RamAndRomUtils {
         return fileSizeString;
     }
 
+    /**
+     * 返回的进程分配的最大物理内存，包含native heap 和java heap，单位是M
+     * @param context
+     * @return
+     */
+    public static long getMemoryClass(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        int memorySize = activityManager.getMemoryClass();
+        return memorySize;
+    }
 }
