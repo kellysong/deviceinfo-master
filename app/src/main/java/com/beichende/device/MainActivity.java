@@ -49,6 +49,7 @@ import com.beichende.device.util.OsUtils;
 import com.beichende.device.util.RamAndRomUtils;
 import com.beichende.device.util.ScreenUtils;
 import com.beichende.device.util.SensorUtils;
+import com.beichende.device.util.SimulatorUtils;
 import com.beichende.device.widget.GpuRenderer;
 
 import java.text.DecimalFormat;
@@ -106,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @return
      */
     public static boolean isAdopt(Context context) {
+        if (SimulatorUtils.isSimulator(context)){
+            return true;
+        }
         IntentFilter intentFilter = new IntentFilter(
                 Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatusIntent = context.registerReceiver(null, intentFilter);
