@@ -1,4 +1,4 @@
-package com.beichende.device;
+package com.sjl.device;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.nfc.NfcAdapter;
@@ -39,21 +38,26 @@ import android.widget.Toast;
 
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
-import com.beichende.device.bean.DeviceInfo;
-import com.beichende.device.util.BatteryUtils;
-import com.beichende.device.util.CameraUtils;
-import com.beichende.device.util.CpuUtils;
-import com.beichende.device.util.DeviceIdUtils;
-import com.beichende.device.util.LogUtils;
-import com.beichende.device.util.OsUtils;
-import com.beichende.device.util.RamAndRomUtils;
-import com.beichende.device.util.ScreenUtils;
-import com.beichende.device.util.SensorUtils;
-import com.beichende.device.util.SimulatorUtils;
-import com.beichende.device.widget.GpuRenderer;
+import com.sjl.device.bean.NetworkInfo;
+import com.sjl.device.util.BatteryUtils;
+import com.sjl.device.util.CameraUtils;
+import com.sjl.device.util.CpuUtils;
+import com.sjl.device.util.DeviceIdUtils;
+import com.sjl.device.util.LogUtils;
+import com.sjl.device.util.NetworkInfoUtils;
+import com.sjl.device.util.OsUtils;
+import com.sjl.device.util.RamAndRomUtils;
+import com.sjl.device.util.ScreenUtils;
+import com.sjl.device.util.SensorUtils;
+import com.sjl.device.util.SimulatorUtils;
+import com.sjl.device.widget.GpuRenderer;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import hugo.weaving.DebugLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private BatInfoReceiver batInfoReceiver;
@@ -62,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private WifiManager wifi;
     private Display display;
     private DisplayMetrics dm;
-
+    //获取网络连接管理者
+    private ConnectivityManager connectionManager;
     private int BatteryN;       //目前电量
     private String BatteryTechnology;//电池技术
     private int BatteryV;       //电池电压
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String BatteryStatus;   //电池状态
     private String BatteryTemp;     //电池使用情况
 
+    static ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (isAdopt(this)) {
             Toast.makeText(this, "当前运行在模拟器，可能存在部分功能异常", Toast.LENGTH_SHORT).show();
         }
+        if (executorService == null) {
+            executorService = Executors.newFixedThreadPool(3);
+        }
+
+
         PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
             @Override
             public void onGranted() {
@@ -107,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @return
      */
     public static boolean isAdopt(Context context) {
-        if (SimulatorUtils.isSimulator(context)){
+        if (SimulatorUtils.isSimulator(context)) {
             return true;
         }
         IntentFilter intentFilter = new IntentFilter(
@@ -128,12 +139,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void init() {
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        connectionManager = (ConnectivityManager)
+                getSystemService(CONNECTIVITY_SERVICE);
         display = getWindowManager().getDefaultDisplay();
         dm = getResources().getDisplayMetrics();
-
         //基本信息
         initBaseInfo();
-
         try {
             //CPU
             initCpuInfo();
@@ -165,7 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 初始化传感器信息
      */
-    private void initSensorInfo() {
+    @DebugLog
+    public void initSensorInfo() {
         String sensorInfo = SensorUtils.getDeviceSensorInfo(this);
         TextView view = findViewById(R.id.sensorList);
         view.setMovementMethod(ScrollingMovementMethod.getInstance());//textview滚动设置
@@ -191,7 +203,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initTransferInfo() {
+    @DebugLog
+    public void initTransferInfo() {
         NfcManager manager = (NfcManager) this.getSystemService(Context.NFC_SERVICE);
         NfcAdapter adapter = manager.getDefaultAdapter();
         if (adapter != null) {
@@ -204,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 初始化状态信息
      */
-    private void initStatusInfo() {
+    @DebugLog
+    public void initStatusInfo() {
         try {
             Class localClass = Class.forName("android.os.SystemProperties");
             Object localObject1 = localClass.newInstance();
@@ -216,11 +230,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        //获取网络连接管理者
-        ConnectivityManager connectionManager = (ConnectivityManager)
-                getSystemService(CONNECTIVITY_SERVICE);
         //获取网络的状态信息，有下面三种方式
-        NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+        android.net.NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
         if (networkInfo != null) {
             setEditText(R.id.lianwang, networkInfo.getType() + "");
             setEditText(R.id.lianwangname, networkInfo.getTypeName());
@@ -246,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setEditText(R.id.radiovis, android.os.Build.getRadioVersion());
         try {
-            DeviceInfo deviceInfo = DeviceInfoHandler.getNetworkInfo(this);
+            NetworkInfo deviceInfo = NetworkInfoUtils.getNetworkInfo(this);
             if (deviceInfo != null) {
                 setEditText(R.id.ip, deviceInfo.getIp());
                 setEditText(R.id.wifimac, deviceInfo.getMac());
@@ -269,7 +280,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initShowInfo() {
+    @DebugLog
+    public void initShowInfo() {
         int densityDpi = dm.densityDpi;
         setEditText(R.id.content_wh, display.getWidth() + "*" + display.getHeight());
         setEditText(R.id.dpi, densityDpi + "");
@@ -293,20 +305,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          *         xxxhdpi 480dpi~640dpi
          */
         String dir;
-        if (densityDpi <= 120){
-            dir="mipmap-ldpi";
-        }else if(densityDpi <= 160){
-            dir="mipmap-mdpi";
-        }else if(densityDpi <= 240){
-            dir="mipmap-hdpi";
-        }else if(densityDpi <= 320){
-            dir="mipmap-xhdpi";
-        }else if(densityDpi <= 480){
-            dir="mipmap-xxhdpi";
-        }else if(densityDpi <= 640){
-            dir="mipmap-xxxhdpi";
-        }else{
-            dir="mipmap-xxxxhdpi";
+        if (densityDpi <= 120) {
+            dir = "mipmap-ldpi";
+        } else if (densityDpi <= 160) {
+            dir = "mipmap-mdpi";
+        } else if (densityDpi <= 240) {
+            dir = "mipmap-hdpi";
+        } else if (densityDpi <= 320) {
+            dir = "mipmap-xhdpi";
+        } else if (densityDpi <= 480) {
+            dir = "mipmap-xxhdpi";
+        } else if (densityDpi <= 640) {
+            dir = "mipmap-xxxhdpi";
+        } else {
+            dir = "mipmap-xxxxhdpi";
         }
         setEditText(R.id.imgDir, dir);
 
@@ -400,7 +412,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initMemoryInfo() {
+    @DebugLog
+    public void initMemoryInfo() {
         setEditText(R.id.ram, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableMemory(this), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalMemorySize(this), false, true));
         setEditText(R.id.rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableInternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalInternalMemorySize(), false, true));
         setEditText(R.id.sd_rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableExternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalExternalMemorySize(), false, true));
@@ -408,7 +421,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initCpuInfo() {
+    @DebugLog
+    public void initCpuInfo() {
         setEditText(R.id.curCoreNum, Runtime.getRuntime().availableProcessors() + "");
         setEditText(R.id.cpu, CpuUtils.getCpuName());
         String abis;
@@ -425,7 +439,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initBaseInfo() {
+    @DebugLog
+    public void initBaseInfo() {
         setEditText(R.id.brand, android.os.Build.BRAND);
         setEditText(R.id.model, android.os.Build.MODEL);
         setEditText(R.id.hardware, android.os.Build.HARDWARE);
@@ -437,10 +452,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.sdk_INT, Build.VERSION.SDK_INT + "");
         setEditText(R.id.serial, android.os.Build.SERIAL);
         setEditText(R.id.device, android.os.Build.DEVICE);
-        setEditText(R.id.release, "Android " + Build.VERSION.RELEASE + "(" + CpuUtils.getArchType(this) + "位)");
-        String kernelVersion = OsUtils.getKernelVersion();
-        setEditText(R.id.kernelVersion, kernelVersion);
-        WebView webView = new WebView(this);
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                final String archType = CpuUtils.getArchType(MainActivity.this);
+                final String kernelVersion = OsUtils.getKernelVersion();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setEditText(R.id.release, "Android " + Build.VERSION.RELEASE + "(" + archType + "位)");
+                        setEditText(R.id.kernelVersion, kernelVersion);
+                    }
+                });
+            }
+        });
+
+        WebView webView = MyApplication.getWebView();
         WebSettings settings = webView.getSettings();
         // 如果访问的页面中有JavaScript，则WebView必须设置支持JavaScript，否则显示空白页面
         webView.getSettings().setJavaScriptEnabled(true);
@@ -456,9 +483,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initCameraInfo() {
-        setEditText(R.id.back_camera, CameraUtils.getCameraPixels(CameraUtils.hasBackCamera()));
-        setEditText(R.id.front_camera, CameraUtils.getCameraPixels(CameraUtils.hasFrontCamera()));
+    @DebugLog
+    public void initCameraInfo() {
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                final String cameraPixels = CameraUtils.getCameraPixels(CameraUtils.hasBackCamera());
+                final String cameraPixels1 = CameraUtils.getCameraPixels(CameraUtils.hasFrontCamera());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setEditText(R.id.back_camera, cameraPixels);
+                        setEditText(R.id.front_camera, cameraPixels1);
+                    }
+                });
+            }
+        });
+
+
     }
 
     private void setEditText(int id, String s) {

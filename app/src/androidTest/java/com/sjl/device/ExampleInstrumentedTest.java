@@ -1,4 +1,4 @@
-package com.beichende.device;
+package com.sjl.device;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

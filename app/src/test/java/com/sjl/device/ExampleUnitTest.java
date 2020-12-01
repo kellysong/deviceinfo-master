@@ -1,4 +1,4 @@
-package com.beichende.device;
+package com.sjl.device;
 
 import org.junit.Test;
 

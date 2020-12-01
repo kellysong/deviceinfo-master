@@ -1,4 +1,4 @@
-package com.beichende.device.widget;
+package com.sjl.device.widget;
 
 import android.opengl.GLSurfaceView;
 import android.util.Log;

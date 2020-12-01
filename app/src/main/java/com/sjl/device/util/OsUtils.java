@@ -1,4 +1,4 @@
-package com.beichende.device.util;
+package com.sjl.device.util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
-package com.beichende.device.bean;
+package com.sjl.device.bean;
 
 /**
  * 
@@ -9,12 +9,12 @@ package com.beichende.device.bean;
  * @time 2017年12月1日 上午10:59:32
  * @copyright(C) 2017 song
  */
-public class DeviceInfo {
+public class NetworkInfo {
 	private String ip;
 	private String mac;
 	
 	
-	public DeviceInfo(String ip, String mac) {
+	public NetworkInfo(String ip, String mac) {
 		this.ip = ip;
 		this.mac = mac;
 	}

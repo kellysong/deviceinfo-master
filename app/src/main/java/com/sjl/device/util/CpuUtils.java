@@ -1,4 +1,4 @@
-package com.beichende.device.util;
+package com.sjl.device.util;
 
 import android.content.Context;
 import android.util.Log;
