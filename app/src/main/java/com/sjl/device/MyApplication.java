@@ -1,7 +1,6 @@
 package com.sjl.device;
 
 import android.app.Application;
-import android.webkit.WebView;
 
 /**
  * TODO
@@ -13,16 +12,11 @@ import android.webkit.WebView;
  * @copyright(C) 2020 song
  */
 public class MyApplication extends Application {
-    static WebView webView;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        webView = new WebView(this);
     }
 
-    public static WebView getWebView() {
-        return webView;
-    }
+
 }

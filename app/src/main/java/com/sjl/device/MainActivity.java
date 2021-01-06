@@ -21,6 +21,7 @@ import android.opengl.GLSurfaceView;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -467,7 +468,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        WebView webView = MyApplication.getWebView();
+        final WebView webView = mWebView;
+        if (webView != null){
+            showWebViewInfo(webView);
+        }else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView = new WebView(MainActivity.this);
+                    showWebViewInfo(mWebView);
+                }
+            },1500);
+        }
+
+        String uniquePsuedoID = DeviceIdUtils.getUniquePsuedoID();
+        LogUtils.i("uniquePsuedoID:" + uniquePsuedoID);
+        setEditText(R.id.uuid, uniquePsuedoID);
+
+    }
+
+    private void showWebViewInfo(WebView webView) {
         WebSettings settings = webView.getSettings();
         // 如果访问的页面中有JavaScript，则WebView必须设置支持JavaScript，否则显示空白页面
         webView.getSettings().setJavaScriptEnabled(true);
@@ -477,11 +497,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        webView.getSettings().setUserAgentString(userAgent+";beichende/paf");
 //        userAgent = settings.getUserAgentString();
         setEditText(R.id.userAgent, userAgent);
-        String uniquePsuedoID = DeviceIdUtils.getUniquePsuedoID();
-        LogUtils.i("uniquePsuedoID:" + uniquePsuedoID);
-        setEditText(R.id.uuid, uniquePsuedoID);
-
     }
+
+    static WebView mWebView;
 
     @DebugLog
     public void initCameraInfo() {
