@@ -482,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         String uniquePsuedoID = DeviceIdUtils.getUniquePsuedoID();
+        System.out.println(uniquePsuedoID);
         LogUtils.i("uniquePsuedoID:" + uniquePsuedoID);
         setEditText(R.id.uuid, uniquePsuedoID);
 

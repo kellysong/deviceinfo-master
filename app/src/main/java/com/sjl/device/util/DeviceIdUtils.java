@@ -22,11 +22,21 @@ public class DeviceIdUtils {
      */
     public static String getUniquePsuedoID() {
         String serial;
+        System.out.println("Build.BOARD:"+Build.BOARD);
+        System.out.println("Build.BRAND:"+Build.BRAND);
+        System.out.println("Build.DEVICE:"+Build.DEVICE);
+        System.out.println("Build.DISPLAY:"+Build.DISPLAY);
+        System.out.println("Build.HOST:"+Build.HOST);
+        System.out.println("Build.ID:"+Build.ID);
+        System.out.println("Build.MANUFACTURER:"+Build.MANUFACTURER);
+        System.out.println("Build.MODEL:"+Build.MODEL);
+        System.out.println("Build.PRODUCT:"+Build.PRODUCT);
+        System.out.println("Build.TAGS:"+Build.TAGS);
+        System.out.println("Build.TYPE:"+Build.TYPE);
+        System.out.println("Build.USER:"+Build.USER);
         String m_szDevIDShort = "35" +
                 Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
-
-                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
-
+                + Build.DEVICE.length() % 10 +
                 Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
 
                 Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
