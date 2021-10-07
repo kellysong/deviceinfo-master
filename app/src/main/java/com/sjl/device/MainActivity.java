@@ -23,9 +23,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
@@ -77,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String BatteryTemp;     //电池使用情况
 
     static ExecutorService executorService;
+    String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CAMERA};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this, permissions, new PermissionsResultAction() {
             @Override
             public void onGranted() {
                 init();
@@ -180,7 +185,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @DebugLog
     public void initSensorInfo() {
         String sensorInfo = SensorUtils.getDeviceSensorInfo(this);
-        TextView view = findViewById(R.id.sensorList);
+        setTextViewScroll(R.id.sensorList);
+        setEditText(R.id.sensorList, sensorInfo);
+
+
+    }
+
+    private void setTextViewScroll(int viewId) {
+        TextView view = findViewById(viewId);
         view.setMovementMethod(ScrollingMovementMethod.getInstance());//textview滚动设置
         view.setOnTouchListener(new View.OnTouchListener() {//解决ScrollView与内部嵌套的TextView滚动冲突
             @Override
@@ -199,9 +211,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             }
         });
-        setEditText(R.id.sensorList, sensorInfo);
-
-
     }
 
     @DebugLog
@@ -384,6 +393,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            setTextViewScroll(R.id.gl_renderer);
+                            setTextViewScroll(R.id.gl_extensions);
+
                             setEditText(R.id.gl_renderer, renderer);
                             setEditText(R.id.gl_vendor, vendor);
                             setEditText(R.id.gl_version, version);
@@ -462,23 +474,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         setEditText(R.id.release, "Android " + Build.VERSION.RELEASE + "(" + archType + "位)");
+                        setTextViewScroll(R.id.kernelVersion);
                         setEditText(R.id.kernelVersion, kernelVersion);
+
                     }
                 });
             }
         });
 
         final WebView webView = mWebView;
-        if (webView != null){
+        if (webView != null) {
             showWebViewInfo(webView);
-        }else {
+        } else {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mWebView = new WebView(MainActivity.this);
+                    mWebView = new WebView(MyApplication.getContext());
                     showWebViewInfo(mWebView);
                 }
-            },1500);
+            }, 1500);
         }
 
         String uniquePsuedoID = DeviceIdUtils.getUniquePsuedoID();
@@ -497,6 +511,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //可以自己修改UserAgent
 //        webView.getSettings().setUserAgentString(userAgent+";beichende/paf");
 //        userAgent = settings.getUserAgentString();
+        setTextViewScroll(R.id.userAgent);
         setEditText(R.id.userAgent, userAgent);
     }
 
