@@ -268,19 +268,6 @@
             <TextView
                 style="@style/Item.Label"
 
-                android:text="核心" />
-
-            <TextView
-                android:id="@+id/curCoreNum"
-                style="@style/Item.Edit"
-                android:hint="核心" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
                 android:text="型号" />
 
             <TextView
@@ -300,6 +287,19 @@
                 android:id="@+id/cpuabi"
                 style="@style/Item.Edit"
                 android:hint="cpu指令集" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/Item.Layout">
+
+            <TextView
+                style="@style/Item.Label"
+
+                android:text="核心" />
+
+            <TextView
+                android:id="@+id/curCoreNum"
+                style="@style/Item.Edit"
+                android:hint="核心" />
         </LinearLayout>
 
         <LinearLayout style="@style/Item.Layout">
@@ -531,6 +531,42 @@
 
             <TextView
                 android:id="@+id/smallestWidth"
+                style="@style/Item.Edit" />
+
+        </LinearLayout>
+        <LinearLayout style="@style/Item.Layout">
+
+            <TextView
+                style="@style/Item.Label"
+
+                android:text="分辩率限定符" />
+
+            <TextView
+                android:id="@+id/resolutionQualifier"
+                style="@style/Item.Edit" />
+
+        </LinearLayout>
+        <LinearLayout style="@style/Item.Layout">
+
+            <TextView
+                style="@style/Item.Label"
+
+                android:text="状态栏高度" />
+
+            <TextView
+                android:id="@+id/statusBarHeight"
+                style="@style/Item.Edit" />
+
+        </LinearLayout>
+        <LinearLayout style="@style/Item.Layout">
+
+            <TextView
+                style="@style/Item.Label"
+
+                android:text="导航栏高度" />
+
+            <TextView
+                android:id="@+id/navigationBarHeight"
                 style="@style/Item.Edit" />
 
         </LinearLayout>
@@ -911,6 +947,18 @@
                 android:hint="网络类型名" />
         </LinearLayout>
 
+        <LinearLayout style="@style/Item.Layout">
+
+            <TextView
+                style="@style/Item.Label"
+
+                android:text="其它sim卡信息" />
+
+            <TextView
+                android:id="@+id/other_sim"
+                style="@style/Item.Edit"
+                android:hint="其它sim卡信息" />
+        </LinearLayout>
 
         <LinearLayout style="@style/Item.Layout">
 

@@ -23,6 +23,8 @@
         android:required="true" />
     <!-- 蓝牙权限 end -->
 
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

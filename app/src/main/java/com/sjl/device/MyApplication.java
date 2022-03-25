@@ -3,6 +3,8 @@ package com.sjl.device;
 import android.app.Application;
 import android.content.Context;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 /**
  * TODO
  *
@@ -18,6 +20,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = this;
+        //Bugly_v3.4.4
+        CrashReport.initCrashReport(getApplicationContext(), "e6ee273eff", false);
     }
 
     public static Context getContext() {

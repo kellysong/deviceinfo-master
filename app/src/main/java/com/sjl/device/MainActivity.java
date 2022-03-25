@@ -27,9 +27,13 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,6 +60,8 @@ import com.sjl.device.widget.GpuRenderer;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static ExecutorService executorService;
     String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
+//            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.CAMERA};
 
@@ -98,7 +104,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this, permissions, new PermissionsResultAction() {
             @Override
             public void onGranted() {
-                init();
+                try {
+                    init();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -144,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void init() {
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         connectionManager = (ConnectivityManager)
                 getSystemService(CONNECTIVITY_SERVICE);
         display = getWindowManager().getDefaultDisplay();
@@ -250,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setEditText(R.id.lianwangname, "--");
         }
 
+        //下面只能获取正在使用的单卡信息
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             setEditText(R.id.imei, telephonyManager.getDeviceId());
             setEditText(R.id.imsi, telephonyManager.getSubscriberId());
@@ -262,6 +273,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setEditText(R.id.netcountryiso, telephonyManager.getNetworkCountryIso());
             setEditText(R.id.netoperator, telephonyManager.getNetworkOperator());
             setEditText(R.id.netoperatorname, telephonyManager.getNetworkOperatorName());
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+            SubscriptionManager  mSubscriptionManager = SubscriptionManager.from(this);
+            List<SubscriptionInfo> mSubInfoList = mSubscriptionManager.getActiveSubscriptionInfoList();
+            setTextViewScroll(R.id.other_sim);
+            for (SubscriptionInfo info : mSubInfoList) {
+                System.out.println(info.toString());
+                if (!Objects.equals(info.getNumber(),telephonyManager.getLine1Number())){
+                    setEditText(R.id.other_sim, info.toString());
+                    break;
+                }else {
+                    setEditText(R.id.other_sim, "--");
+                }
+            }
         }
 
 
@@ -296,7 +321,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.content_wh, display.getWidth() + "*" + display.getHeight());
         setEditText(R.id.dpi, densityDpi + "");
         setEditText(R.id.density, dm.density + "");
-        setEditText(R.id.smallestWidth, ScreenUtils.getSmallestWidthDP(this) + "");
+        float smallestWidthDP = ScreenUtils.getSmallestWidthDP(this);
+        setEditText(R.id.smallestWidth, smallestWidthDP + "(value-sw"+(int)Math.floor(smallestWidthDP)+"dp)");
+        setEditText(R.id.resolutionQualifier, display.getWidth() + "x" + display.getHeight()+"(value-"+ display.getWidth() + "x" + display.getHeight()+")");
+        setEditText(R.id.statusBarHeight, ScreenUtils.getStatusBarHeight(this) +"px");
+        int navigationBarHeight = ScreenUtils.getNavigationBarHeight(this);
+        setEditText(R.id.navigationBarHeight, navigationBarHeight > 0 ? navigationBarHeight +"px":"无");
 
         Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
         int ori = mConfiguration.orientation; //获取屏幕方向
@@ -316,19 +346,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         String dir;
         if (densityDpi <= 120) {
-            dir = "mipmap-ldpi";
+            dir = "mipmap-ldpi(drawable-ldpi)";
         } else if (densityDpi <= 160) {
-            dir = "mipmap-mdpi";
+            dir = "mipmap-mdpi(drawable-mdpi)";
         } else if (densityDpi <= 240) {
-            dir = "mipmap-hdpi";
+            dir = "mipmap-hdpi(drawable-hdpi)";
         } else if (densityDpi <= 320) {
-            dir = "mipmap-xhdpi";
+            dir = "mipmap-xhdpi(drawable-xhdpi)";
         } else if (densityDpi <= 480) {
-            dir = "mipmap-xxhdpi";
+            dir = "mipmap-xxhdpi(drawable-xxhdpi)";
         } else if (densityDpi <= 640) {
-            dir = "mipmap-xxxhdpi";
+            dir = "mipmap-xxxhdpi(drawable-xxxhdpi)";
         } else {
-            dir = "mipmap-xxxxhdpi";
+            dir = "mipmap-xxxxhdpi(drawable-xxxxhdpi)";
         }
         setEditText(R.id.imgDir, dir);
 
@@ -350,6 +380,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double screenInches = diagonal / (double) xdpi;
         DecimalFormat df = new DecimalFormat("#.0");
         setEditText(R.id.screenInches, df.format(screenInches));
+
+
+
+
 
         // Check if the system supports OpenGL ES 2.0.
         final ActivityManager activityManager =
