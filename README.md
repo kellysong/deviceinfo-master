@@ -5,11 +5,11 @@
 
 目的:
 
-1. 查看设备信息（省去下载安兔兔这类的重量级的应用，含有大量恶心的广告)
+1. 查看设备信息（省去下载安兔兔这类的重量级、大量广告的应用)
 2. 快速找到Android屏幕适配的相关信息（sw限定符、宽高限定符和图片适配等）
 
 
-demo下载[app-debug.apk](app-debug.apk)
+demo下载[app-release.apk](app-release.apk)
 
 ## 效果图
 

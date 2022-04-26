@@ -221,12 +221,12 @@
             <TextView
                 style="@style/Item.Label"
 
-                android:text="WebView" />
+                android:text="WebView UserAgent" />
 
             <TextView
                 android:id="@+id/userAgent"
                 style="@style/Item.Edit"
-                android:hint="WebView" />
+                android:hint="WebView UserAgent" />
 
         </LinearLayout>
 
@@ -369,12 +369,12 @@
             <TextView
                 style="@style/Item.Label"
 
-                android:text="外部SD卡存储" />
+                android:text="外部扩展SD卡存储" />
 
             <TextView
                 android:id="@+id/sd_rom"
                 style="@style/Item.Edit"
-                android:hint="外部SD卡存储" />
+                android:hint="外部扩展SD卡存储" />
         </LinearLayout>
 
         <LinearLayout style="@style/Item.Layout">

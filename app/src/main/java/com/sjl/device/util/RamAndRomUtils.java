@@ -2,14 +2,22 @@ package com.sjl.device.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  * TODO
@@ -21,7 +29,8 @@ import java.text.DecimalFormat;
  * @copyright(C) 2018 song
  */
 public class RamAndRomUtils {
-    private static final int ERROR = -1;
+    private static final int ERROR = 0;
+    private static final String TAG = "RamAndRomUtils";
 
     /**
      * SDCARD是否存
@@ -58,37 +67,87 @@ public class RamAndRomUtils {
     }
 
     /**
-     * 获取SDCARD剩余存储空间
+     * 获取扩展SDCARD剩余存储空间
      *
+     * @param context
      * @return
      */
-    public static long getAvailableExternalMemorySize() {
-        if (externalMemoryAvailable()) {
-            File path = Environment.getExternalStorageDirectory();
-            StatFs stat = new StatFs(path.getPath());
-            long blockSize = stat.getBlockSize();
-            long availableBlocks = stat.getAvailableBlocks();
-            return availableBlocks * blockSize;
-        } else {
-            return ERROR;
+    public static long getAvailableExternalMemorySize(Context context) {
+        try {
+            String storagePath = getStoragePath(context, true);
+            if (!TextUtils.isEmpty(storagePath)) {
+                StatFs stat = new StatFs(storagePath);
+                long blockSize = stat.getBlockSize();
+                long availableBlocks = stat.getAvailableBlocks();
+                return availableBlocks * blockSize;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return ERROR;
     }
 
     /**
-     * 获取SDCARD总的存储空间
+     * 获取扩展SDCARD总的存储空间
      *
+     * @param context
      * @return
      */
-    public static long getTotalExternalMemorySize() {
-        if (externalMemoryAvailable()) {
-            File path = Environment.getExternalStorageDirectory();
-            StatFs stat = new StatFs(path.getPath());
-            long blockSize = stat.getBlockSize();
-            long totalBlocks = stat.getBlockCount();
-            return totalBlocks * blockSize;
-        } else {
-            return ERROR;
+    public static long getTotalExternalMemorySize(Context context) {
+        try {
+            String storagePath = getStoragePath(context, true);
+            if (!TextUtils.isEmpty(storagePath)) {
+                StatFs stat = new StatFs(storagePath);
+                long blockSize = stat.getBlockSize();
+                long totalBlocks = stat.getBlockCount();
+                return totalBlocks * blockSize;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return ERROR;
+    }
+
+    /**
+     * 获取存储路径
+     *
+     * @param context
+     * @param isRemovable 为false时得到的是内置sd卡路径，为true则为外置sd卡路径。
+     * @return
+     */
+    public static String getStoragePath(Context context, boolean isRemovable) throws Exception {
+
+        StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //7.0以上
+            List<StorageVolume> storageVolumes = mStorageManager.getStorageVolumes();
+            Log.i(TAG, "storageVolumes："+storageVolumes.size());
+            for (StorageVolume storageVolume : storageVolumes) {
+                boolean removable = storageVolume.isRemovable();
+                Class<?> storageVolumeClazz = storageVolume.getClass();
+                Method getPath = storageVolumeClazz.getMethod("getPath");
+                String path = (String) getPath.invoke(storageVolume);
+                if (isRemovable == removable) {
+                    return path;
+                }
+            }
+        } else {
+            Class<?> storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
+            Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
+            Method getPath = storageVolumeClazz.getMethod("getPath");
+            Method is_Removable = storageVolumeClazz.getMethod("isRemovable");
+            Object result = getVolumeList.invoke(mStorageManager);
+            final int length = Array.getLength(result);
+            Log.i(TAG, "storageVolumes："+length);
+            for (int i = 0; i < length; i++) {
+                Object storageVolumeElement = Array.get(result, i);
+                String path = (String) getPath.invoke(storageVolumeElement);
+                if (isRemovable == (Boolean) is_Removable.invoke(storageVolumeElement)) {
+                    return path;
+                }
+            }
+        }
+        return null;
     }
 
     /**

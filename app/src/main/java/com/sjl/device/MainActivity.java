@@ -42,8 +42,8 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anthonycr.grant.PermissionsManager;
-import com.anthonycr.grant.PermissionsResultAction;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 import com.sjl.device.bean.NetworkInfo;
 import com.sjl.device.util.BatteryUtils;
 import com.sjl.device.util.CameraUtils;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static ExecutorService executorService;
     String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.CAMERA};
 
@@ -99,30 +99,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (executorService == null) {
             executorService = Executors.newFixedThreadPool(3);
         }
-
-
-        PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this, permissions, new PermissionsResultAction() {
-            @Override
-            public void onGranted() {
-                try {
-                    init();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onDenied(String permission) {
-                LogUtils.i("拒绝权限：" + permission);
-                if (permission.contains("SYSTEM_ALERT_WINDOW")) {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                    intent.setData(Uri.parse("package:" + getPackageName()));
-                    startActivityForResult(intent, 100);
-                } else {
-                    finish();
-                }
-            }
-        });
+        PermissionX.init(this)
+                .permissions(permissions)
+                .request(new RequestCallback() {
+                    @Override
+                    public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
+                        if (allGranted){
+                            try {
+                                init();
+                            } catch (Exception e) {
+                                LogUtils.e(e);
+                            }
+                        }else {
+                            LogUtils.i("拒绝权限：" + deniedList);
+                            if (deniedList.contains("SYSTEM_ALERT_WINDOW")) {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivityForResult(intent, 100);
+                            } else {
+                                finish();
+                            }
+                        }
+                    }
+                });
 
     }
 
@@ -160,33 +159,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         display = getWindowManager().getDefaultDisplay();
         dm = getResources().getDisplayMetrics();
         //基本信息
-        initBaseInfo();
-        try {
-            //CPU
-            initCpuInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        //存储（可用/总量）
-        initMemoryInfo();
+        runCatching(new Runnable(){
+            @Override
+            public void run() {
+                initBaseInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
+                //CPU
+                initCpuInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
+                //存储（可用/总量）
+                initMemoryInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
 
-        //显示
-        initShowInfo();
+                //显示
+                initShowInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
+                //相机
+                initCameraInfo();
 
-        //相机
-        initCameraInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
+                //传输
+                initTransferInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
+                //传感器
+                initSensorInfo();
+            }
+        });
+        runCatching(new Runnable() {
+            @Override
+            public void run() {
+                //状态信息
+                initStatusInfo();
+            }
+        });
 
-        //传输
-        initTransferInfo();
-        //传感器
-        initSensorInfo();
-        //状态信息
-        initStatusInfo();
         // 注册一个系统 BroadcastReceiver，作为访问电池信息之用，这个不能直接在AndroidManifest.xml中注册
         batInfoReceiver = new BatInfoReceiver();//不要用匿名内部类
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         this.registerReceiver(batInfoReceiver, intentFilter);
+    }
+
+    private void runCatching(Runnable runnable) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            LogUtils.e(e);
+        }
     }
 
     /**
@@ -273,13 +316,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setEditText(R.id.netcountryiso, telephonyManager.getNetworkCountryIso());
             setEditText(R.id.netoperator, telephonyManager.getNetworkOperator());
             setEditText(R.id.netoperatorname, telephonyManager.getNetworkOperatorName());
+
         }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
             SubscriptionManager  mSubscriptionManager = SubscriptionManager.from(this);
             List<SubscriptionInfo> mSubInfoList = mSubscriptionManager.getActiveSubscriptionInfoList();
             setTextViewScroll(R.id.other_sim);
             for (SubscriptionInfo info : mSubInfoList) {
-                System.out.println(info.toString());
+                LogUtils.i("SubscriptionInfo:"+info.toString());
                 if (!Objects.equals(info.getNumber(),telephonyManager.getLine1Number())){
                     setEditText(R.id.other_sim, info.toString());
                     break;
@@ -305,8 +349,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.getbssid, wifi.getConnectionInfo().getBSSID());
         BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
         if (defaultAdapter != null) {
-            setEditText(R.id.bluemac, defaultAdapter
-                    .getAddress());
+            setEditText(R.id.bluemac, defaultAdapter.getAddress());
             setEditText(R.id.bluname, defaultAdapter.getName());
         } else {
             setEditText(R.id.bluemac, "不支持");
@@ -463,7 +506,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void initMemoryInfo() {
         setEditText(R.id.ram, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableMemory(this), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalMemorySize(this), false, true));
         setEditText(R.id.rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableInternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalInternalMemorySize(), false, true));
-        setEditText(R.id.sd_rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableExternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalExternalMemorySize(), false, true));
+        setEditText(R.id.sd_rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableExternalMemorySize(this), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalExternalMemorySize(this), false, true));
         setEditText(R.id.app_rom, RamAndRomUtils.getMemoryClass(this) + "M");
 
     }
@@ -581,11 +624,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
