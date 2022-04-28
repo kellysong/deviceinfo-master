@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 
 /**
  * TODO
@@ -49,19 +50,46 @@ public class OsUtils {
             }
         }
         kernelVersion = info;
-//        try {
-//            if (info != "") {
-//                final String keyword = "version ";
-//                int index = info.indexOf(keyword);
-//                line = info.substring(index + keyword.length());
-//                index = line.indexOf(" ");
-//                kernelVersion = line.substring(0, index);
-//            }
-//        } catch (IndexOutOfBoundsException e) {
-//            e.printStackTrace();
-//        }
 
         return kernelVersion;
     }
+
+    /**
+     * BASEBAND-VER
+     * 基带版本
+     * return String
+     */
+
+    public static String getBaseBandVersion(){
+        String Version = "";
+        try {
+            Class cl = Class.forName("android.os.SystemProperties");
+            Object invoker = cl.newInstance();
+            Method m = cl.getMethod("get", new Class[] { String.class,String.class });
+            Object result = m.invoke(invoker, new Object[]{"gsm.version.baseband", "no message"});
+            Version = (String)result;
+        } catch (Exception e) {
+        }
+        return Version;
+    }
+
+
+
+    /**
+     * INNER-VER
+     * 内部版本
+     * return String
+     */
+
+    public static String getInnerVersion(){
+        String ver = "" ;
+        if(android.os.Build.DISPLAY .contains(android.os.Build.VERSION.INCREMENTAL)){
+            ver = android.os.Build.DISPLAY;
+        }else{
+            ver = android.os.Build.VERSION.INCREMENTAL;
+        }
+        return ver;
+    }
+
 
 }

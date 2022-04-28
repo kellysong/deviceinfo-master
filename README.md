@@ -15,3 +15,7 @@ demo下载[app-release.apk](app-release.apk)
 
 <img src="https://github.com/kellysong/deviceinfo-master/blob/master/screenshot/deviceinfo.png" width="30%" alt="加载中..."/>
 
+
+## 参考
+
+https://blog.csdn.net/ganfanzhou/article/details/84899757

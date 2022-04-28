@@ -23,17 +23,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,6 +40,7 @@ import android.widget.Toast;
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.RequestCallback;
 import com.sjl.device.bean.NetworkInfo;
+import com.sjl.device.bean.StorageInfo;
 import com.sjl.device.util.BatteryUtils;
 import com.sjl.device.util.CameraUtils;
 import com.sjl.device.util.CpuUtils;
@@ -56,15 +52,26 @@ import com.sjl.device.util.RamAndRomUtils;
 import com.sjl.device.util.ScreenUtils;
 import com.sjl.device.util.SensorUtils;
 import com.sjl.device.util.SimulatorUtils;
+import com.sjl.device.util.StorageInfoUtils;
 import com.sjl.device.widget.GpuRenderer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import hugo.weaving.DebugLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -104,13 +111,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .request(new RequestCallback() {
                     @Override
                     public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
-                        if (allGranted){
+                        if (allGranted) {
                             try {
                                 init();
                             } catch (Exception e) {
                                 LogUtils.e(e);
                             }
-                        }else {
+                        } else {
                             LogUtils.i("拒绝权限：" + deniedList);
                             if (deniedList.contains("SYSTEM_ALERT_WINDOW")) {
                                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
@@ -160,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dm = getResources().getDisplayMetrics();
         //基本信息
 
-        runCatching(new Runnable(){
+        runCatching(new Runnable() {
             @Override
             public void run() {
                 initBaseInfo();
@@ -277,21 +284,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
-     * 初始化状态信息
-     */
+        /**
+         * 初始化状态信息
+         */
     @DebugLog
     public void initStatusInfo() {
-        try {
-            Class localClass = Class.forName("android.os.SystemProperties");
-            Object localObject1 = localClass.newInstance();
-            Object localObject3 = localClass.getMethod("get", new Class[]{String.class, String.class}).invoke(localObject1, new Object[]{"ro.build.display.id", ""});
-
-            setEditText(R.id.osVersion, localObject3 + "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
         //获取网络的状态信息，有下面三种方式
         android.net.NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
@@ -319,15 +316,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
-            SubscriptionManager  mSubscriptionManager = SubscriptionManager.from(this);
+            SubscriptionManager mSubscriptionManager = SubscriptionManager.from(this);
             List<SubscriptionInfo> mSubInfoList = mSubscriptionManager.getActiveSubscriptionInfoList();
             setTextViewScroll(R.id.other_sim);
             for (SubscriptionInfo info : mSubInfoList) {
-                LogUtils.i("SubscriptionInfo:"+info.toString());
-                if (!Objects.equals(info.getNumber(),telephonyManager.getLine1Number())){
+                LogUtils.i("SubscriptionInfo:" + info.toString());
+                if (!Objects.equals(info.getNumber(), telephonyManager.getLine1Number())) {
                     setEditText(R.id.other_sim, info.toString());
                     break;
-                }else {
+                } else {
                     setEditText(R.id.other_sim, "--");
                 }
             }
@@ -365,11 +362,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setEditText(R.id.dpi, densityDpi + "");
         setEditText(R.id.density, dm.density + "");
         float smallestWidthDP = ScreenUtils.getSmallestWidthDP(this);
-        setEditText(R.id.smallestWidth, smallestWidthDP + "(value-sw"+(int)Math.floor(smallestWidthDP)+"dp)");
-        setEditText(R.id.resolutionQualifier, display.getWidth() + "x" + display.getHeight()+"(value-"+ display.getWidth() + "x" + display.getHeight()+")");
-        setEditText(R.id.statusBarHeight, ScreenUtils.getStatusBarHeight(this) +"px");
+        setEditText(R.id.smallestWidth, smallestWidthDP + "(value-sw" + (int) Math.floor(smallestWidthDP) + "dp)");
+        setEditText(R.id.resolutionQualifier, display.getWidth() + "x" + display.getHeight() + "(value-" + display.getWidth() + "x" + display.getHeight() + ")");
+        setEditText(R.id.statusBarHeight, ScreenUtils.getStatusBarHeight(this) + "px");
         int navigationBarHeight = ScreenUtils.getNavigationBarHeight(this);
-        setEditText(R.id.navigationBarHeight, navigationBarHeight > 0 ? navigationBarHeight +"px":"无");
+        setEditText(R.id.navigationBarHeight, navigationBarHeight > 0 ? navigationBarHeight + "px" : "无");
 
         Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
         int ori = mConfiguration.orientation; //获取屏幕方向
@@ -423,9 +420,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double screenInches = diagonal / (double) xdpi;
         DecimalFormat df = new DecimalFormat("#.0");
         setEditText(R.id.screenInches, df.format(screenInches));
-
-
-
 
 
         // Check if the system supports OpenGL ES 2.0.
@@ -504,9 +498,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @DebugLog
     public void initMemoryInfo() {
-        setEditText(R.id.ram, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableMemory(this), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalMemorySize(this), false, true));
-        setEditText(R.id.rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableInternalMemorySize(), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalInternalMemorySize(), false, true));
-        setEditText(R.id.sd_rom, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableExternalMemorySize(this), false, false) + " / " + RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalExternalMemorySize(this), false, true));
+        String s = RamAndRomUtils.formatFileSize(RamAndRomUtils.getTotalMemorySize(this), false, true);
+        setEditText(R.id.ram, RamAndRomUtils.formatFileSize(RamAndRomUtils.getAvailableMemory(this), false, false) + " / " + s);
+        Map<Integer, StorageInfo> storageInfos= StorageInfoUtils.queryStorageInfo(this);
+        if (storageInfos != null && storageInfos.size() > 0) {
+            LogUtils.i(storageInfos.toString());
+
+            StorageInfo internalStorageInfo = storageInfos.get(1);
+            setEditText(R.id.rom, RamAndRomUtils.formatFileSize(internalStorageInfo.free, false, false) + " / " + RamAndRomUtils.formatFileSize(internalStorageInfo.total, false, true));
+
+            if (storageInfos.size() == 2){
+                StorageInfo externalStorageInfo = storageInfos.get(0);
+                setEditText(R.id.sd_rom, RamAndRomUtils.formatFileSize(externalStorageInfo.free, false, false) + " / " + RamAndRomUtils.formatFileSize(externalStorageInfo.total, false, true));
+            }else {
+                setEditText(R.id.sd_rom,"--/--");
+            }
+        }
         setEditText(R.id.app_rom, RamAndRomUtils.getMemoryClass(this) + "M");
 
     }
@@ -520,7 +527,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             abis = Arrays.toString(Build.SUPPORTED_ABIS);
             setEditText(R.id.cpuabi, abis);
         } else {
-            setEditText(R.id.cpuabi, "--");
+            String cpuAbi2 = Build.CPU_ABI2;
+            if (TextUtils.isEmpty(cpuAbi2)){
+                setEditText(R.id.cpuabi, cpuAbi2);
+            }else {
+                setEditText(R.id.cpuabi, Build.CPU_ABI);
+            }
         }
         setEditText(R.id.cpuFramework, CpuUtils.getCpuFramework());
         setEditText(R.id.cpuFreq, CpuUtils.getMinCpuFreq() + " ~ " + CpuUtils.getMaxCpuFreq());
@@ -558,6 +570,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
             }
         });
+        try {
+
+            Class localClass = Class.forName("android.os.SystemProperties");
+            Object localObject1 = localClass.newInstance();
+            Method get = localClass.getMethod("get", new Class[]{String.class, String.class});
+            get.setAccessible(true);
+            Object localObject3 = get.invoke(localObject1, new Object[]{"ro.build.display.id", ""});
+
+            setEditText(R.id.osVersion, localObject3 + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         final WebView webView = mWebView;
         if (webView != null) {
@@ -623,7 +647,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
     }
-
 
 
     @Override
