@@ -242,7 +242,18 @@
                 style="@style/Item.Edit"
                 android:hint="UUID" />
         </LinearLayout>
+        <LinearLayout style="@style/Item.Layout">
 
+            <TextView
+                style="@style/Item.Label"
+
+                android:text="Root" />
+
+            <TextView
+                android:id="@+id/root"
+                style="@style/Item.Edit"
+                android:hint="Root" />
+        </LinearLayout>
         <!--CPU-->
         <TextView
             style="@style/Title"

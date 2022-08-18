@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.ConfigurationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -55,11 +56,6 @@ import com.sjl.device.util.SimulatorUtils;
 import com.sjl.device.util.StorageInfoUtils;
 import com.sjl.device.widget.GpuRenderer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -96,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.CAMERA};
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (isAdopt(this)) {
             Toast.makeText(this, "当前运行在模拟器，可能存在部分功能异常", Toast.LENGTH_SHORT).show();
         }
+
         if (executorService == null) {
             executorService = Executors.newFixedThreadPool(3);
         }
@@ -600,7 +598,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println(uniquePsuedoID);
         LogUtils.i("uniquePsuedoID:" + uniquePsuedoID);
         setEditText(R.id.uuid, uniquePsuedoID);
-
+        boolean b = OsUtils.checkDeviceDebuggable();
+        setEditText(R.id.root, b ? "是" : "否", b ? Color.RED : Color.GREEN);
     }
 
     private void showWebViewInfo(WebView webView) {
@@ -642,6 +641,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((TextView) this.findViewById(id)).setText(s);
     }
 
+    private void setEditText(int id, String s,int color) {
+        TextView textView = this.findViewById(id);
+        textView.setText(s);
+        textView.setTextColor(color);
+    }
 
     @Override
     public void onClick(View v) {

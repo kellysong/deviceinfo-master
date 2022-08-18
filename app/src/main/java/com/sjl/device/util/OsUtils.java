@@ -92,4 +92,15 @@ public class OsUtils {
     }
 
 
+    /**
+     * 检测系统是否为测试版,若是非官方发布版，很可能是完全root的版本
+     * @return
+     */
+    public static boolean checkDeviceDebuggable(){
+        String buildTags = android.os.Build.TAGS;
+        if (buildTags != null && buildTags.contains("test-keys")) {
+            return true;
+        }
+        return false;
+    }
 }
