@@ -317,15 +317,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SubscriptionManager mSubscriptionManager = SubscriptionManager.from(this);
             List<SubscriptionInfo> mSubInfoList = mSubscriptionManager.getActiveSubscriptionInfoList();
             setTextViewScroll(R.id.other_sim);
-            for (SubscriptionInfo info : mSubInfoList) {
-                LogUtils.i("SubscriptionInfo:" + info.toString());
-                if (!Objects.equals(info.getNumber(), telephonyManager.getLine1Number())) {
-                    setEditText(R.id.other_sim, info.toString());
-                    break;
-                } else {
-                    setEditText(R.id.other_sim, "--");
+            if (mSubInfoList !=null){
+                for (SubscriptionInfo info : mSubInfoList) {
+                    LogUtils.i("SubscriptionInfo:" + info.toString());
+                    if (!Objects.equals(info.getNumber(), telephonyManager.getLine1Number())) {
+                        setEditText(R.id.other_sim, info.toString());
+                        break;
+                    } else {
+                        setEditText(R.id.other_sim, "--");
+                    }
                 }
             }
+
         }
 
 
