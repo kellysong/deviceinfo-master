@@ -228,7 +228,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         this.registerReceiver(batInfoReceiver, intentFilter);
     }
+    public String getDeviceModel() {
+        String marketName = getSystemProperty("ro.product.marketname");
+        // 如果 marketname 属性有效且不是空字符串，则使用它
+        if (marketName != null && !marketName.isEmpty() && !"unknown".equals(marketName)) {
+            return marketName;
+        } else {
+            // 否则使用 Build.MODEL
+            return Build.MODEL;
+        }
+    }
 
+    // 通过反射获取 SystemProperty 的辅助方法
+    private String getSystemProperty(String key) {
+        try {
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method get = c.getMethod("get", String.class, String.class);
+            return (String) get.invoke(null, key, "unknown");
+        } catch (Exception e) {
+            return "unknown";
+        }
+    }
     private void runCatching(Runnable runnable) {
         try {
             runnable.run();
@@ -544,17 +564,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @DebugLog
     public void initBaseInfo() {
-        setEditText(R.id.brand, android.os.Build.BRAND);
-        setEditText(R.id.model, android.os.Build.MODEL);
-        setEditText(R.id.hardware, android.os.Build.HARDWARE);
-        setEditText(R.id.board, android.os.Build.BOARD);
-        setEditText(R.id.changshang, android.os.Build.MANUFACTURER);
+        setEditText(R.id.brand, Build.BRAND);
+        setEditText(R.id.model, getDeviceModel());
+        setEditText(R.id.hardware, Build.HARDWARE);
+        setEditText(R.id.board, Build.BOARD);
+        setEditText(R.id.changshang, Build.MANUFACTURER);
         setEditText(R.id.android_id, Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
         setEditText(R.id.b_id, Build.ID);
-        setEditText(R.id.gjtime, android.os.Build.TIME + "");
+        setEditText(R.id.gjtime, Build.TIME + "");
         setEditText(R.id.sdk_INT, Build.VERSION.SDK_INT + "");
-        setEditText(R.id.serial, android.os.Build.SERIAL);
-        setEditText(R.id.device, android.os.Build.DEVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setEditText(R.id.serial, Build.getSerial());
+        }else {
+            setEditText(R.id.serial, Build.SERIAL);
+        }
+        setEditText(R.id.device, Build.DEVICE);
         executorService.execute(new Runnable() {
             @Override
             public void run() {
