@@ -33,6 +33,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ import com.sjl.device.widget.GpuRenderer;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -68,10 +70,17 @@ import java.util.concurrent.Executors;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.NestedScrollView;
 import hugo.weaving.DebugLog;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private BatInfoReceiver batInfoReceiver;
+
+    //吸顶悬浮标题条相关控件
+    private View stickyHeader;
+    private TextView stickyChip;
+    private TextView stickyTitle;
+    private final List<View> sectionHeaders = new ArrayList<>();
 
     private TelephonyManager telephonyManager;
     private WifiManager wifi;
@@ -97,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initStickyHeader();
         if (isAdopt(this)) {
             Toast.makeText(this, "当前运行在模拟器，可能存在部分功能异常", Toast.LENGTH_SHORT).show();
         }
@@ -255,6 +265,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
             LogUtils.e(e);
         }
+    }
+
+    /**
+     * 初始化滚动吸顶的分类标题
+     */
+    private void initStickyHeader() {
+        stickyHeader = findViewById(R.id.sticky_header);
+        stickyChip = findViewById(R.id.sticky_chip);
+        stickyTitle = findViewById(R.id.sticky_title);
+        ViewGroup content = findViewById(R.id.ll_content);
+        for (int i = 0; i < content.getChildCount(); i++) {
+            View child = content.getChildAt(i);
+            if ("section_header".equals(child.getTag())) {
+                sectionHeaders.add(child);
+            }
+        }
+        NestedScrollView scrollView = findViewById(R.id.scroll_view);
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY,
+                                       int oldScrollX, int oldScrollY) {
+                //按滚动位置切换吸顶标题
+                updateStickyHeader(scrollY);
+            }
+        });
+    }
+
+    /**
+     * 根据滚动位置更新吸顶标题内容与显隐
+     */
+    private void updateStickyHeader(int scrollY) {
+        View current = null;
+        for (View header : sectionHeaders) {
+            if (header.getTop() <= scrollY) {
+                current = header;
+            } else {
+                break;
+            }
+        }
+        if (current == null) {
+            //顶部 Hero 卡片可见时不显示吸顶条
+            stickyHeader.setVisibility(View.GONE);
+            return;
+        }
+        if (stickyHeader.getVisibility() != View.VISIBLE) {
+            stickyHeader.setVisibility(View.VISIBLE);
+        }
+        TextView chip = (TextView) ((ViewGroup) current).getChildAt(0);
+        TextView title = (TextView) ((ViewGroup) current).getChildAt(1);
+        stickyChip.setText(chip.getText());
+        stickyTitle.setText(title.getText());
     }
 
     /**
@@ -765,6 +826,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         LogUtils.i("===========onDestroy");
+        sectionHeaders.clear();
         if (batInfoReceiver != null) {
             this.unregisterReceiver(batInfoReceiver);
             batInfoReceiver = null;

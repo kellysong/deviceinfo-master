@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 信息行底：仅底部 1dp 分隔线（行高 50dip，配合 Item.Layout 使用） -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:top="49dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/row_divider" />
+        </shape>
+    </item>
+</layer-list>

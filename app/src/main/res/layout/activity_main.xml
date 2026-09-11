@@ -1,1077 +1,1189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <LinearLayout
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffff"
-        android:orientation="vertical">
+        android:background="@drawable/bg_app"
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
 
-
-        <TextView
-            style="@style/Title"
-            android:text="基本信息" />
-
-
-        <LinearLayout style="@style/Item.Layout">
+        <!-- 顶部概览卡片 -->
+        <LinearLayout style="@style/Hero.Card">
 
             <TextView
-                style="@style/Item.Label"
-                android:text="品牌" />
+                style="@style/Hero.Chip"
+                android:text="机" />
 
-            <TextView
-                android:id="@+id/brand"
-                style="@style/Item.Edit"
-                android:hint="品牌" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    style="@style/Hero.Title"
+                    android:text="设备信息" />
+
+                <TextView
+                    style="@style/Hero.Subtitle"
+                    android:text="HARDWARE · SYSTEM · NETWORK" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="基" />
 
             <TextView
-                style="@style/Item.Label"
-                android:text="版本号" />
-
-            <TextView
-                android:id="@+id/osVersion"
-                style="@style/Item.Edit"
-                android:hint="版本号" />
-
+                style="@style/Title"
+                android:text="基本信息" />
         </LinearLayout>
 
+        <LinearLayout style="@style/Section.Card">
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
-                android:text="设备名称" />
+                <TextView
+                    style="@style/Item.Label"
+                    android:text="品牌" />
 
-            <TextView
-                android:id="@+id/device"
-                style="@style/Item.Edit"
-                android:hint="设备名称" />
+                <TextView
+                    android:id="@+id/brand"
+                    style="@style/Item.Edit"
+                    android:hint="品牌" />
 
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+                    android:text="版本号" />
+
+                <TextView
+                    android:id="@+id/osVersion"
+                    style="@style/Item.Edit"
+                    android:hint="版本号" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+                    android:text="设备名称" />
+
+                <TextView
+                    android:id="@+id/device"
+                    style="@style/Item.Edit"
+                    android:hint="设备名称" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+                    android:text="型号" />
+
+                <TextView
+                    android:id="@+id/model"
+                    style="@style/Item.Edit"
+                    android:hint="型号" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="主板" />
+
+                <TextView
+                    android:id="@+id/board"
+                    style="@style/Item.Edit"
+                    android:hint="主板" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="硬件名称" />
+
+                <TextView
+                    android:id="@+id/hardware"
+                    style="@style/Item.Edit"
+                    android:hint="硬件名称" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="制造商" />
+
+                <TextView
+                    android:id="@+id/changshang"
+                    style="@style/Item.Edit"
+                    android:hint="制造商" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="串口序列号" />
+
+                <TextView
+                    android:id="@+id/serial"
+                    style="@style/Item.Edit"
+                    android:hint="设备串口" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="Android ID" />
+
+                <TextView
+                    android:id="@+id/android_id"
+                    style="@style/Item.Edit"
+                    android:hint="Android ID" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="Build ID" />
+
+                <TextView
+                    android:id="@+id/b_id"
+                    style="@style/Item.Edit"
+                    android:hint="Build ID" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="Build时间" />
+
+                <TextView
+                    android:id="@+id/gjtime"
+                    style="@style/Item.Edit"
+                    android:hint="Build时间" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="系统版本" />
+
+                <TextView
+                    android:id="@+id/release"
+                    style="@style/Item.Edit"
+                    android:hint="系统版本" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="系统的API级别" />
+
+                <TextView
+                    android:id="@+id/sdk_INT"
+                    style="@style/Item.Edit"
+                    android:hint="系统的API级别" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="内核版本" />
+
+                <TextView
+                    android:id="@+id/kernelVersion"
+                    style="@style/Item.Edit"
+                    android:hint="内核版本" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="WebView UserAgent" />
+
+                <TextView
+                    android:id="@+id/userAgent"
+                    style="@style/Item.Edit"
+                    android:hint="WebView UserAgent" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="UUID(自定义)" />
+
+                <TextView
+                    android:id="@+id/uuid"
+                    style="@style/Item.Edit"
+                    android:hint="UUID" />
+            </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="Root" />
+
+                <TextView
+                    android:id="@+id/root"
+                    style="@style/Item.Edit"
+                    android:hint="Root" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-                android:text="型号" />
-
-            <TextView
-                android:id="@+id/model"
-                style="@style/Item.Edit"
-                android:hint="型号" />
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="主板" />
-
-            <TextView
-                android:id="@+id/board"
-                style="@style/Item.Edit"
-                android:hint="主板" />
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="硬件名称" />
-
-            <TextView
-                android:id="@+id/hardware"
-                style="@style/Item.Edit"
-                android:hint="硬件名称" />
-
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="制造商" />
-
-            <TextView
-                android:id="@+id/changshang"
-                style="@style/Item.Edit"
-                android:hint="制造商" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="串口序列号" />
-
-            <TextView
-                android:id="@+id/serial"
-                style="@style/Item.Edit"
-                android:hint="设备串口" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="Android ID" />
-
-            <TextView
-                android:id="@+id/android_id"
-                style="@style/Item.Edit"
-                android:hint="Android ID" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="Build ID" />
-
-            <TextView
-                android:id="@+id/b_id"
-                style="@style/Item.Edit"
-                android:hint="Build ID" />
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="Build时间" />
-
-            <TextView
-                android:id="@+id/gjtime"
-                style="@style/Item.Edit"
-                android:hint="Build时间" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="系统版本" />
-
-            <TextView
-                android:id="@+id/release"
-                style="@style/Item.Edit"
-                android:hint="系统版本" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="系统的API级别" />
-
-            <TextView
-                android:id="@+id/sdk_INT"
-                style="@style/Item.Edit"
-                android:hint="系统的API级别" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="内核版本" />
-
-            <TextView
-                android:id="@+id/kernelVersion"
-                style="@style/Item.Edit"
-                android:hint="内核版本" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="WebView UserAgent" />
-
-            <TextView
-                android:id="@+id/userAgent"
-                style="@style/Item.Edit"
-                android:hint="WebView UserAgent" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="UUID(自定义)" />
-
-            <TextView
-                android:id="@+id/uuid"
-                style="@style/Item.Edit"
-                android:hint="UUID" />
-        </LinearLayout>
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="Root" />
-
-            <TextView
-                android:id="@+id/root"
-                style="@style/Item.Edit"
-                android:hint="Root" />
-        </LinearLayout>
         <!--CPU-->
-        <TextView
-            style="@style/Title"
-            android:text="CPU"
-             />
-
-
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="C" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="架构" />
-
-            <TextView
-                android:id="@+id/cpuFramework"
-                style="@style/Item.Edit"
-                android:hint="架构" />
+                style="@style/Title"
+                android:text="CPU" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout style="@style/Section.Card">
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="型号" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/cpu"
-                style="@style/Item.Edit"
-                android:hint="型号" />
+                    android:text="架构" />
+
+                <TextView
+                    android:id="@+id/cpuFramework"
+                    style="@style/Item.Edit"
+                    android:hint="架构" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="型号" />
+
+                <TextView
+                    android:id="@+id/cpu"
+                    style="@style/Item.Edit"
+                    android:hint="型号" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="支持的abi" />
+
+                <TextView
+                    android:id="@+id/cpuabi"
+                    style="@style/Item.Edit"
+                    android:hint="cpu指令集" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="核心" />
+
+                <TextView
+                    android:id="@+id/curCoreNum"
+                    style="@style/Item.Edit"
+                    android:hint="核心" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="频率" />
+
+                <TextView
+                    android:id="@+id/cpuFreq"
+                    style="@style/Item.Edit"
+                    android:hint="频率" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="当前频率" />
+
+                <TextView
+                    android:id="@+id/curCpuFreq"
+                    style="@style/Item.Edit"
+                    android:hint="当前频率" />
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="支持的abi" />
-
-            <TextView
-                android:id="@+id/cpuabi"
-                style="@style/Item.Edit"
-                android:hint="cpu指令集" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="核心" />
-
-            <TextView
-                android:id="@+id/curCoreNum"
-                style="@style/Item.Edit"
-                android:hint="核心" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="频率" />
-
-            <TextView
-                android:id="@+id/cpuFreq"
-                style="@style/Item.Edit"
-                android:hint="频率" />
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="当前频率" />
-
-            <TextView
-                android:id="@+id/curCpuFreq"
-                style="@style/Item.Edit"
-                android:hint="当前频率" />
-        </LinearLayout>
-
-
-
-
 
         <!--存储（可用/总量）-->
-        <TextView
-            style="@style/Title"
-            android:text="存储（可用/总量）"
-            />
-
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="存" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="运行内存" />
-
-            <TextView
-                android:id="@+id/ram"
-                style="@style/Item.Edit"
-                android:hint="运行内存" />
+                style="@style/Title"
+                android:text="存储（可用/总量）" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout style="@style/Section.Card">
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="机身存储" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/rom"
-                style="@style/Item.Edit"
-                android:hint="机身存储" />
+                    android:text="运行内存" />
+
+                <TextView
+                    android:id="@+id/ram"
+                    style="@style/Item.Edit"
+                    android:hint="运行内存" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="机身存储" />
+
+                <TextView
+                    android:id="@+id/rom"
+                    style="@style/Item.Edit"
+                    android:hint="机身存储" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="外部扩展SD卡存储" />
+
+                <TextView
+                    android:id="@+id/sd_rom"
+                    style="@style/Item.Edit"
+                    android:hint="外部扩展SD卡存储" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="应用最大物理内存" />
+
+                <TextView
+                    android:id="@+id/app_rom"
+                    style="@style/Item.Edit"
+                    android:hint="应用最大物理内存" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="显" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="外部扩展SD卡存储" />
-
-            <TextView
-                android:id="@+id/sd_rom"
-                style="@style/Item.Edit"
-                android:hint="外部扩展SD卡存储" />
+                style="@style/Title"
+                android:text="显示" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout style="@style/Section.Card">
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="应用最大物理内存" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/app_rom"
-                style="@style/Item.Edit"
-                android:hint="应用最大物理内存" />
+                    android:text="GPU渲染器" />
+
+                <TextView
+                    android:id="@+id/gl_renderer"
+                    style="@style/Item.Edit"
+                    android:hint="GPU渲染器" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="供应商" />
+
+                <TextView
+                    android:id="@+id/gl_vendor"
+                    style="@style/Item.Edit"
+                    android:hint="供应商" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="GPU版本" />
+
+                <TextView
+                    android:id="@+id/gl_version"
+                    style="@style/Item.Edit"
+                    android:hint="GPU版本" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="GPU扩展名" />
+
+                <TextView
+                    android:id="@+id/gl_extensions"
+                    style="@style/Item.Edit"
+                    android:hint="GPU扩展名" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="尺寸" />
+
+                <TextView
+                    android:id="@+id/screenInches"
+                    style="@style/Item.Edit"
+                    android:hint="请输入" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="内容宽*高" />
+
+                <TextView
+                    android:id="@+id/content_wh"
+                    style="@style/Item.Edit"
+                    android:hint="请输入" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="分辨率" />
+
+                <TextView
+                    android:id="@+id/resolution"
+                    style="@style/Item.Edit"
+                    android:hint="分辨率" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="dpi" />
+
+                <TextView
+                    android:id="@+id/dpi"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="density" />
+
+                <TextView
+                    android:id="@+id/density"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="smallestWidth" />
+
+                <TextView
+                    android:id="@+id/smallestWidth"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="分辩率限定符" />
+
+                <TextView
+                    android:id="@+id/resolutionQualifier"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="状态栏高度" />
+
+                <TextView
+                    android:id="@+id/statusBarHeight"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="导航栏高度" />
+
+                <TextView
+                    android:id="@+id/navigationBarHeight"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="屏幕方向" />
+
+                <TextView
+                    android:id="@+id/orientation"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="对应图片目录" />
+
+                <TextView
+                    android:id="@+id/imgDir"
+                    style="@style/Item.Edit" />
+
+            </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            style="@style/Title"
-            android:text="显示"
-             />
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="GPU渲染器" />
-
-            <TextView
-                android:id="@+id/gl_renderer"
-                style="@style/Item.Edit"
-                android:hint="GPU渲染器" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="供应商" />
-
-            <TextView
-                android:id="@+id/gl_vendor"
-                style="@style/Item.Edit"
-                android:hint="供应商" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="GPU版本" />
-
-            <TextView
-                android:id="@+id/gl_version"
-                style="@style/Item.Edit"
-                android:hint="GPU版本" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="GPU扩展名" />
-
-            <TextView
-                android:id="@+id/gl_extensions"
-                style="@style/Item.Edit"
-                android:hint="GPU扩展名" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="尺寸" />
-
-            <TextView
-                android:id="@+id/screenInches"
-                style="@style/Item.Edit"
-                android:hint="请输入" />
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="内容宽*高" />
-
-            <TextView
-                android:id="@+id/content_wh"
-                style="@style/Item.Edit"
-                android:hint="请输入" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="分辨率" />
-
-            <TextView
-                android:id="@+id/resolution"
-                style="@style/Item.Edit"
-                android:hint="分辨率" />
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="dpi" />
-
-            <TextView
-                android:id="@+id/dpi"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="density" />
-
-            <TextView
-                android:id="@+id/density"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="smallestWidth" />
-
-            <TextView
-                android:id="@+id/smallestWidth"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="分辩率限定符" />
-
-            <TextView
-                android:id="@+id/resolutionQualifier"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="状态栏高度" />
-
-            <TextView
-                android:id="@+id/statusBarHeight"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="导航栏高度" />
-
-            <TextView
-                android:id="@+id/navigationBarHeight"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="屏幕方向" />
-
-            <TextView
-                android:id="@+id/orientation"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-        <LinearLayout style="@style/Item.Layout">
-
-            <TextView
-                style="@style/Item.Label"
-
-                android:text="对应图片目录" />
-
-            <TextView
-                android:id="@+id/imgDir"
-                style="@style/Item.Edit" />
-
-        </LinearLayout>
-
 
         <!--相机-->
-        <TextView
-            style="@style/Title"
-            android:text="相机"
-            />
-
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="相" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="后置摄像头" />
-
-            <TextView
-                android:id="@+id/back_camera"
-                style="@style/Item.Edit"
-                android:hint="后置摄像头" />
+                style="@style/Title"
+                android:text="相机" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout style="@style/Section.Card">
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="前置摄像头" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/front_camera"
-                style="@style/Item.Edit"
-                android:hint="前置摄像头" />
+                    android:text="后置摄像头" />
+
+                <TextView
+                    android:id="@+id/back_camera"
+                    style="@style/Item.Edit"
+                    android:hint="后置摄像头" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="前置摄像头" />
+
+                <TextView
+                    android:id="@+id/front_camera"
+                    style="@style/Item.Edit"
+                    android:hint="前置摄像头" />
+            </LinearLayout>
         </LinearLayout>
 
         <!--电池-->
-        <TextView
-            style="@style/Title"
-            android:text="电池"
-            />
-
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="电" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="容量" />
-
-            <TextView
-                android:id="@+id/batteryCapacity"
-                style="@style/Item.Edit"
-                android:hint="容量" />
+                style="@style/Title"
+                android:text="电池" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout style="@style/Section.Card">
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="技术" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/BatteryTechnology"
-                style="@style/Item.Edit"
-                android:hint="技术" />
-        </LinearLayout>
+                    android:text="容量" />
 
-        <LinearLayout style="@style/Item.Layout">
+                <TextView
+                    android:id="@+id/batteryCapacity"
+                    style="@style/Item.Edit"
+                    android:hint="容量" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="电压" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/BatteryV"
-                style="@style/Item.Edit"
-                android:hint="电压" />
-        </LinearLayout>
+                    android:text="技术" />
 
-        <LinearLayout style="@style/Item.Layout">
+                <TextView
+                    android:id="@+id/BatteryTechnology"
+                    style="@style/Item.Edit"
+                    android:hint="技术" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="电量" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/BatteryN"
-                style="@style/Item.Edit"
-                android:hint="电量" />
-        </LinearLayout>
+                    android:text="电压" />
 
-        <LinearLayout style="@style/Item.Layout">
+                <TextView
+                    android:id="@+id/BatteryV"
+                    style="@style/Item.Edit"
+                    android:hint="电压" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="温度" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/BatteryT"
-                style="@style/Item.Edit"
-                android:hint="温度" />
-        </LinearLayout>
+                    android:text="电量" />
 
-        <LinearLayout style="@style/Item.Layout">
+                <TextView
+                    android:id="@+id/BatteryN"
+                    style="@style/Item.Edit"
+                    android:hint="电量" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="状态" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/BatteryStatus"
-                style="@style/Item.Edit"
-                android:hint="状态" />
+                    android:text="温度" />
+
+                <TextView
+                    android:id="@+id/BatteryT"
+                    style="@style/Item.Edit"
+                    android:hint="温度" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="状态" />
+
+                <TextView
+                    android:id="@+id/BatteryStatus"
+                    style="@style/Item.Edit"
+                    android:hint="状态" />
+            </LinearLayout>
         </LinearLayout>
 
         <!--传输-->
-        <TextView
-            style="@style/Title"
-            android:text="传输"
-             />
-
-        <LinearLayout style="@style/Item.Layout">
-
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="传" />
 
             <TextView
-                style="@style/Item.Label"
+                style="@style/Title"
+                android:text="传输" />
+        </LinearLayout>
 
-                android:text="NFC" />
+        <LinearLayout style="@style/Section.Card">
 
-            <TextView
-                android:id="@+id/nfc"
-                style="@style/Item.Edit"
-                android:hint="NFC" />
+            <LinearLayout style="@style/Item.Layout">
+
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="NFC" />
+
+                <TextView
+                    android:id="@+id/nfc"
+                    style="@style/Item.Edit"
+                    android:hint="NFC" />
+            </LinearLayout>
         </LinearLayout>
 
         <!--传感器-->
-        <TextView
-            style="@style/Title"
-            android:text="传感器"
-           />
-
-        <LinearLayout style="@style/Item.Layout">
-
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="感" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="支持的传感器" />
-
-            <TextView
-                android:id="@+id/sensorList"
-                style="@style/Item.Edit"
-                android:hint="sensorList"
-                android:scrollbars="vertical" />
+                style="@style/Title"
+                android:text="传感器" />
         </LinearLayout>
 
+        <LinearLayout style="@style/Section.Card">
+
+            <LinearLayout style="@style/Item.Layout">
+
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="支持的传感器" />
+
+                <TextView
+                    android:id="@+id/sensorList"
+                    style="@style/Item.Edit"
+                    android:hint="sensorList"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
+        </LinearLayout>
 
         <!--状态信息-->
-        <TextView
-            style="@style/Title"
-            android:text="状态信息"
-           />
-
-        <LinearLayout style="@style/Item.Layout">
-
+        <LinearLayout
+            style="@style/Section.Header"
+            android:tag="section_header">
+            <TextView
+                style="@style/Section.Chip"
+                android:text="网" />
 
             <TextView
-                style="@style/Item.Label"
-
-                android:text="联网方式" />
-
-            <TextView
-                android:id="@+id/lianwang"
-                style="@style/Item.Edit"
-                android:hint="联网方式" />
+                style="@style/Title"
+                android:text="状态信息" />
         </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+        <LinearLayout style="@style/Section.Card">
 
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
 
-                android:text="联网方式名称" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/lianwangname"
-                style="@style/Item.Edit"
-                android:hint="联网方式名称" />
+                    android:text="联网方式" />
 
+                <TextView
+                    android:id="@+id/lianwang"
+                    style="@style/Item.Edit"
+                    android:hint="联网方式" />
+            </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout style="@style/Item.Layout">
 
-        <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="IMEI" />
+                    android:text="联网方式名称" />
 
-            <TextView
-                android:id="@+id/imei"
-                style="@style/Item.Edit"
-                android:hint="IMEI" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/lianwangname"
+                    style="@style/Item.Edit"
+                    android:hint="联网方式名称" />
 
 
-        <LinearLayout style="@style/Item.Layout">
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="IMSI" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/imsi"
-                style="@style/Item.Edit"
-                android:hint="IMSI" />
-        </LinearLayout>
+                    android:text="IMEI" />
 
-        <LinearLayout style="@style/Item.Layout">
+                <TextView
+                    android:id="@+id/imei"
+                    style="@style/Item.Edit"
+                    android:hint="IMEI" />
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
 
-                android:text="手机号码" />
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                android:id="@+id/number"
-                style="@style/Item.Edit"
-                android:hint="手机号码" />
+                <TextView
+                    style="@style/Item.Label"
 
+                    android:text="IMSI" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/imsi"
+                    style="@style/Item.Edit"
+                    android:hint="IMSI" />
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="手机卡序列号" />
+                    android:text="手机号码" />
 
-            <TextView
-                android:id="@+id/simserial"
-                style="@style/Item.Edit"
-                android:hint="手机卡序列号" />
+                <TextView
+                    android:id="@+id/number"
+                    style="@style/Item.Edit"
+                    android:hint="手机号码" />
 
-        </LinearLayout>
 
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="运营商" />
+                    android:text="手机卡序列号" />
 
-            <TextView
-                android:id="@+id/simoperator"
-                style="@style/Item.Edit"
-                android:hint="运营商" />
+                <TextView
+                    android:id="@+id/simserial"
+                    style="@style/Item.Edit"
+                    android:hint="手机卡序列号" />
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="运营商名字" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/simoperatorname"
-                style="@style/Item.Edit"
-                android:hint="运营商名字" />
+                    android:text="运营商" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/simoperator"
+                    style="@style/Item.Edit"
+                    android:hint="运营商" />
 
-        <LinearLayout style="@style/Item.Layout">
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="国家iso代码" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/simcountryiso"
-                style="@style/Item.Edit"
-                android:hint="国家iso代码" />
+                    android:text="运营商名字" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/simoperatorname"
+                    style="@style/Item.Edit"
+                    android:hint="运营商名字" />
 
-        <LinearLayout style="@style/Item.Layout">
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="网络类型" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/workType"
-                style="@style/Item.Edit"
-                android:hint="网络类型" />
+                    android:text="国家iso代码" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/simcountryiso"
+                    style="@style/Item.Edit"
+                    android:hint="国家iso代码" />
 
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="手机卡国家" />
+                    android:text="网络类型" />
 
-            <TextView
-                android:id="@+id/netcountryiso"
-                style="@style/Item.Edit"
-                android:hint="手机卡国家" />
+                <TextView
+                    android:id="@+id/workType"
+                    style="@style/Item.Edit"
+                    android:hint="网络类型" />
 
+            </LinearLayout>
 
-        </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="网络运营商类型" />
+                    android:text="手机卡国家" />
 
-            <TextView
-                android:id="@+id/netoperator"
-                style="@style/Item.Edit"
-                android:hint="网络运营商类型" />
+                <TextView
+                    android:id="@+id/netcountryiso"
+                    style="@style/Item.Edit"
+                    android:hint="手机卡国家" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="网络类型名" />
+                    android:text="网络运营商类型" />
 
-            <TextView
-                android:id="@+id/netoperatorname"
-                style="@style/Item.Edit"
-                android:hint="网络类型名" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/netoperator"
+                    style="@style/Item.Edit"
+                    android:hint="网络运营商类型" />
 
-        <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+            </LinearLayout>
 
-                android:text="其它sim卡信息" />
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                android:id="@+id/other_sim"
-                style="@style/Item.Edit"
-                android:hint="其它sim卡信息" />
-        </LinearLayout>
+                <TextView
+                    style="@style/Item.Label"
 
-        <LinearLayout style="@style/Item.Layout">
+                    android:text="网络类型名" />
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    android:id="@+id/netoperatorname"
+                    style="@style/Item.Edit"
+                    android:hint="网络类型名" />
+            </LinearLayout>
 
-                android:text="固件版本" />
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                android:id="@+id/radiovis"
-                style="@style/Item.Edit"
-                android:hint="固件版本" />
+                <TextView
+                    style="@style/Item.Label"
 
+                    android:text="其它sim卡信息" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/other_sim"
+                    style="@style/Item.Edit"
+                    android:hint="其它sim卡信息" />
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="IP地址" />
+                    android:text="固件版本" />
 
-            <TextView
-                android:id="@+id/ip"
-                style="@style/Item.Edit"
-                android:hint="IP地址" />
+                <TextView
+                    android:id="@+id/radiovis"
+                    style="@style/Item.Edit"
+                    android:hint="固件版本" />
 
-        </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="WLAN MAC地址" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/wifimac"
-                style="@style/Item.Edit"
-                android:hint="WLAN MAC地址" />
+                    android:text="IP地址" />
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/ip"
+                    style="@style/Item.Edit"
+                    android:hint="IP地址" />
 
-        <LinearLayout style="@style/Item.Layout">
+            </LinearLayout>
 
-            <TextView
-                style="@style/Item.Label"
+            <LinearLayout style="@style/Item.Layout">
 
-                android:text="无线路由器名" />
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                android:id="@+id/getssid"
-                style="@style/Item.Edit"
-                android:hint="无线路由器名" />
+                    android:text="WLAN MAC地址" />
 
+                <TextView
+                    android:id="@+id/wifimac"
+                    style="@style/Item.Edit"
+                    android:hint="WLAN MAC地址" />
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="无线路由器地址" />
+                    android:text="无线路由器名" />
 
-            <TextView
-                android:id="@+id/getbssid"
-                style="@style/Item.Edit"
-                android:hint="无线路由器地址" />
+                <TextView
+                    android:id="@+id/getssid"
+                    style="@style/Item.Edit"
+                    android:hint="无线路由器名" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
+            <LinearLayout style="@style/Item.Layout">
 
-        <LinearLayout style="@style/Item.Layout">
+                <TextView
+                    style="@style/Item.Label"
 
-            <TextView
-                style="@style/Item.Label"
+                    android:text="无线路由器地址" />
 
-                android:text="蓝牙地址" />
+                <TextView
+                    android:id="@+id/getbssid"
+                    style="@style/Item.Edit"
+                    android:hint="无线路由器地址" />
 
-            <TextView
-                android:id="@+id/bluemac"
-                style="@style/Item.Edit"
-                android:hint="蓝牙地址" />
 
-        </LinearLayout>
+            </LinearLayout>
 
 
-        <LinearLayout style="@style/Item.Layout">
+            <LinearLayout style="@style/Item.Layout">
 
-            <TextView
-                style="@style/Item.Label"
+                <TextView
+                    style="@style/Item.Label"
 
-                android:text="蓝牙名称" />
+                    android:text="蓝牙地址" />
 
-            <TextView
-                android:id="@+id/bluname"
-                style="@style/Item.Edit"
-                android:hint="蓝牙名称" />
+                <TextView
+                    android:id="@+id/bluemac"
+                    style="@style/Item.Edit"
+                    android:hint="蓝牙地址" />
 
+            </LinearLayout>
+
+
+            <LinearLayout style="@style/Item.Layout">
+
+                <TextView
+                    style="@style/Item.Label"
+
+                    android:text="蓝牙名称" />
+
+                <TextView
+                    android:id="@+id/bluname"
+                    style="@style/Item.Edit"
+                    android:hint="蓝牙名称" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <android.opengl.GLSurfaceView
@@ -1079,4 +1191,29 @@
             android:layout_width="match_parent"
             android:layout_height="5dp" />
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 滚动吸顶的分类标题条，初始隐藏，由 MainActivity 按滚动位置更新 -->
+    <LinearLayout
+        android:id="@+id/sticky_header"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="14dp"
+        android:background="@drawable/bg_sticky"
+        android:visibility="gone"
+        android:elevation="3dp">
+
+        <TextView
+            android:id="@+id/sticky_chip"
+            style="@style/Section.Chip"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/sticky_title"
+            style="@style/Title"
+            android:layout_marginLeft="0dp"
+            android:text="" />
+    </LinearLayout>
+</FrameLayout>

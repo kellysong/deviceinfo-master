@@ -3,4 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- 设备信息深色 UI 配色 -->
+    <color name="bg_app">#F2F4F8</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="card_stroke">#E6EAF1</color>
+    <color name="row_divider">#EEF1F5</color>
+    <color name="text_label">#7A8699</color>
+    <color name="text_value">#1F2329</color>
+    <color name="text_title">#1F2329</color>
+    <color name="text_subtitle">#98A2B3</color>
+    <color name="text_hint">#B6BDC9</color>
+    <color name="accent">#2563EB</color>
 </resources>

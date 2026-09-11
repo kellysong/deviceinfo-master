@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 分区卡片：纯白底 + 14dp 圆角（无边框，层次靠阴影） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/bg_card" />
+    <corners android:radius="14dp" />
+</shape>

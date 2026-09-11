@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 吸顶分类标题条：不透明页面底色 + 底部分隔线 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bg_app" />
+        </shape>
+    </item>
+
+    <item android:top="43dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/card_stroke" />
+        </shape>
+    </item>
+</layer-list>
